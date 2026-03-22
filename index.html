@@ -150,7 +150,7 @@
   }
 
   .hero-subheadline {
-    font-family: 'Italiana', serif;
+    font-family: 'Playfair Display', serif;
     font-size: clamp(24px, 3.2vw, 42px);
     font-weight: 400;
     color: rgba(244,239,230,0.9);
@@ -865,7 +865,6 @@
     gap: 10px;
     justify-content: center;
     margin-top: 12px;
-    margin-bottom: 12px;
     max-width: 420px;
     width: calc(100% - 48px);
     padding: 0 4px;
@@ -889,11 +888,15 @@
     color: var(--white);
     line-height: 1;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    background: rgba(10,28,16,0.55);
-    border: 1px solid rgba(221,211,158,0.18);
+    background: rgba(244,239,230,0.15);
+    border: 1px solid rgba(244,239,230,0.3);
     border-radius: 4px;
-    padding: clamp(10px, 2.5vw, 16px) 8px clamp(8px, 2vw, 12px);
+    height: clamp(60px, 12vw, 90px);
+    padding: 0;
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(6px);
