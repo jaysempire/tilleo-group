@@ -315,6 +315,76 @@
 
   .submit-btn:hover .btn-shine { left: 150%; }
 
+  /* ── CHECKBOX GROUP ── */
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .checkbox-item input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    min-width: 15px;
+    margin-top: 2px;
+    accent-color: var(--forest);
+    cursor: pointer;
+  }
+
+  .checkbox-item label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.5;
+    letter-spacing: 0;
+    text-transform: none;
+    cursor: pointer;
+  }
+
+  /* ── CONSENT ── */
+  .consent-field {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: rgba(22,61,39,0.04);
+    border: 1px solid rgba(22,61,39,0.12);
+    border-radius: 2px;
+  }
+
+  .consent-field input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    margin-top: 2px;
+    accent-color: var(--forest);
+    cursor: pointer;
+  }
+
+  .consent-field label {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.6;
+    letter-spacing: 0;
+    text-transform: none;
+    cursor: pointer;
+  }
+
+  .consent-field label a {
+    color: var(--forest);
+    text-decoration: underline;
+  }
+
   .privacy-note {
     font-size: 10px;
     color: #999;
@@ -865,7 +935,7 @@
     gap: 10px;
     justify-content: center;
     margin-top: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 8PX;
     max-width: 420px;
     width: calc(100% - 48px);
     padding: 0 4px;
@@ -1013,14 +1083,19 @@
         </div>
 
         <div class="field">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="e.g. +1 512 000 0000" required autocomplete="tel">
+        </div>
+
+        <div class="field">
           <label for="service">What service are you most excited for?</label>
           <select id="service" name="service" required>
             <option value="" disabled selected>Select a service…</option>
             <option value="Essential Home Oversight">Essential Home Oversight</option>
             <option value="Premier Estate Oversight">Premier Estate Oversight</option>
             <option value="White-Glove Estate Management">White-Glove Estate Management</option>
-            <option value="Arrival & Departure Services">Arrival & Departure Services</option>
-            <option value="Vendor & Project Management">Vendor & Project Management</option>
+            <option value="Arrival & Departure Services">Arrival &amp; Departure Services</option>
+            <option value="Vendor & Project Management">Vendor &amp; Project Management</option>
             <option value="Emergency Response">Emergency Response</option>
             <option value="Not sure yet — tell me more">Not sure yet — tell me more</option>
           </select>
@@ -1031,6 +1106,13 @@
           <input type="text" id="referral" name="referral" placeholder="e.g. Instagram, a friend, Google…">
         </div>
 
+      </div>
+
+      <div class="consent-field">
+        <input type="checkbox" id="gdpr-consent" name="gdpr-consent" required>
+        <label for="gdpr-consent">
+          I agree to be contacted by Tilleo Group with updates about their launch and services.
+        </label>
       </div>
 
       <button type="submit" class="submit-btn">
@@ -1215,8 +1297,8 @@
   reveals.forEach(el => observer.observe(el));
 
   // ── HubSpot Config ──
-  const PORTAL_ID   = '148068124';
-  const FORM_ID     = 'f4c3da56-ce9e-4049-8fcf-5ec6c3f1a759';
+  const PORTAL_ID   = '147993691';
+  const FORM_ID     = 'f1b5c74a-2f84-4942-a01f-df65ff01a37a';
   const HS_ENDPOINT = `https://api.hsforms.com/submissions/v3/integration/submit/${PORTAL_ID}/${FORM_ID}`;
 
   // ── Form submit ──
@@ -1232,14 +1314,22 @@
     const service  = document.getElementById('service').value;
     const referral = document.getElementById('referral').value.trim();
 
+    const consent = document.getElementById('gdpr-consent').checked;
+    const phone   = document.getElementById('phone').value.trim();
+
     // Validate required fields
-    if (!fullname || !email || !service) {
-      form.querySelectorAll('input, select').forEach(f => {
+    if (!fullname || !email || !phone || !service || !consent) {
+      form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], select').forEach(f => {
         if (f.required && !f.value.trim()) {
           f.style.borderColor = '#c0392b';
           f.addEventListener('input', () => f.style.borderColor = '', { once: true });
         }
       });
+      const cb = document.getElementById('gdpr-consent');
+      if (!cb.checked) {
+        cb.style.outline = '2px solid #c0392b';
+        cb.addEventListener('change', () => cb.style.outline = '', { once: true });
+      }
       return;
     }
 
@@ -1257,6 +1347,7 @@
         { name: 'firstname',        value: firstName },
         { name: 'lastname',         value: lastName  },
         { name: 'email',            value: email     },
+        { name: 'phone',            value: phone     },
         { name: 'service_interest', value: service   },
         { name: 'referral_source',  value: referral  }
       ],
